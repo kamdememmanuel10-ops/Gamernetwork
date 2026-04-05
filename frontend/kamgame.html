@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gamer Network — Tech & Gaming · Yaoundé</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:#000;
+  --black2:#080808;
+  --black3:#0e0e0e;
+  --black4:#141414;
+  --black5:#1a1a1a;
+  --glass:rgba(255,255,255,0.03);
+  --glass2:rgba(255,255,255,0.06);
+  --glass3:rgba(255,255,255,0.09);
+  --gold:#c9a84c;
+  --gold2:#e8c97a;
+  --gold3:rgba(201,168,76,0.15);
+  --gold4:rgba(201,168,76,0.06);
+  --white:#fff;
+  --white2:rgba(255,255,255,0.65);
+  --white3:rgba(255,255,255,0.35);
+  --white4:rgba(255,255,255,0.12);
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(201,168,76,0.2);
+  --green:#25d366;
+  --red:#ff3b3b;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --display:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--black);color:#fff;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:transform .1s,width .2s,height .2s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s ease,width .25s,height .25s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+
+/* PRELOADER */
+#preloader{position:fixed;inset:0;background:#000;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .8s,visibility .8s}
+#preloader.hide{opacity:0;visibility:hidden}
+.pre-frame{width:280px;height:190px;border-radius:18px;overflow:hidden;border:1px solid var(--border2);background:var(--black4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative}
+.pre-frame .pre-icons{font-size:40px;display:flex;gap:14px}
+.pre-frame img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.pre-frame .pre-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:16px}
+.pre-title{font-family:var(--display);font-size:20px;font-weight:800;color:var(--gold);letter-spacing:4px}
+.pre-sub{font-family:var(--mono);font-size:10px;color:var(--white3);letter-spacing:3px}
+.pre-bar{width:200px;height:1px;background:var(--border);overflow:hidden}
+.pre-bar::after{content:'';display:block;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:scan 1.6s ease forwards}
+@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* NAVBAR */
+#nav{position:fixed;top:0;width:100%;z-index:900;padding:0 5%;transition:all .4s}
+#nav.scrolled{background:rgba(0,0,0,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-inner{height:68px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.nav-logo{width:40px;height:40px;border-radius:10px;border:1px solid var(--border2);overflow:hidden;background:var(--black4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo img{width:100%;height:100%;object-fit:cover}
+.nav-logo .gn{font-family:var(--display);font-size:13px;font-weight:800;color:var(--gold)}
+.nav-title{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:2px}
+.nav-title span{color:var(--gold)}
+.nav-loc{font-family:var(--mono);font-size:9px;color:var(--white3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{color:var(--white3);text-decoration:none;font-size:12.5px;padding:8px 14px;border-radius:6px;transition:all .2s;letter-spacing:.4px}
+.nav-links a:hover{color:#fff;background:var(--glass2)}
+.nav-wa{background:rgba(37,211,102,.1)!important;border:1px solid rgba(37,211,102,.25)!important;color:#fff!important;font-weight:600!important;border-radius:8px!important;padding:8px 16px!important}
+.nav-wa:hover{background:rgba(37,211,102,.2)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:none;padding:6px}
+.hamburger span{width:22px;height:1.5px;background:var(--gold);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mob-menu{display:none;position:fixed;inset:0;top:68px;background:rgba(0,0,0,.98);backdrop-filter:blur(20px);z-index:899;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.mob-menu.open{display:flex}
+.mob-menu a{color:var(--white3);text-decoration:none;font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:color .2s}
+.mob-menu a:hover{color:var(--gold)}
+
+/* HERO */
+.hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;background:var(--black)}
+.hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.35;filter:brightness(.6) contrast(1.1)}
+.hero-vignette{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,.65) 100%),linear-gradient(to bottom,rgba(0,0,0,.5) 0%,transparent 30%,transparent 60%,rgba(0,0,0,.95) 100%),linear-gradient(to right,rgba(0,0,0,.75) 0%,transparent 55%)}
+.hero-grain{position:absolute;inset:0;z-index:2;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");pointer-events:none}
+.hero-content{position:relative;z-index:3;text-align:center;padding:140px 5% 100px;max-width:920px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:14px;font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:32px;animation:fadeUp .7s ease both}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';flex:1;min-width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.hero-eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.hero-h1{font-family:var(--display);font-size:clamp(48px,9vw,118px);font-weight:800;line-height:.92;letter-spacing:-3px;margin-bottom:24px;animation:fadeUp .7s .1s ease both}
+.hero-h1 .gline{display:block;background:linear-gradient(135deg,var(--gold),var(--gold2),#fff8e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-h1 .sline{display:block;color:var(--white3);font-size:.38em;font-weight:400;font-family:var(--mono);letter-spacing:6px;-webkit-text-fill-color:var(--white3);margin-top:18px}
+.hero-p{font-size:16px;color:var(--white2);line-height:1.9;max-width:510px;margin:0 auto 44px;animation:fadeUp .7s .2s ease both}
+.hero-p b{color:var(--gold2)}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;animation:fadeUp .7s .3s ease both}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;border:none;cursor:none;transition:all .25s;font-family:var(--display);letter-spacing:2px;text-transform:uppercase}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#8a5c00);color:#000;box-shadow:0 0 40px rgba(201,168,76,.2)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 10px 50px rgba(201,168,76,.4)}
+.btn-out{background:transparent;color:#fff;border:1px solid var(--border2)}
+.btn-out:hover{background:var(--gold3);border-color:var(--gold);color:var(--gold2)}
+.btn-wa2{background:rgba(37,211,102,.08);color:#fff;border:1px solid rgba(37,211,102,.25)}
+.btn-wa2:hover{background:rgba(37,211,102,.18);color:var(--green)}
+.hero-pills{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+.pill{display:flex;align-items:center;gap:9px;padding:11px 20px;border-radius:100px;text-decoration:none;color:#fff;font-size:13px;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(12px);transition:all .25s}
+.pill:hover{border-color:var(--gold);background:var(--gold4);color:var(--gold2)}
+.pdot{width:7px;height:7px;border-radius:50%;animation:pdotpulse 1.5s infinite}
+.pdot.g{background:var(--green);box-shadow:0 0 6px var(--green)}
+.pdot.y{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+@keyframes pdotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+.hero-scroll{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp .7s .6s ease both}
+.scroll-bar{width:1px;height:44px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scpulse 2s ease-in-out infinite}
+.scroll-txt{font-family:var(--mono);font-size:9px;color:var(--white3);letter-spacing:3px;text-transform:uppercase}
+@keyframes scpulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+
+/* TICKER */
+.ticker{background:var(--black3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:13px 0;overflow:hidden}
+.tick-track{display:flex;animation:tickmov 22s linear infinite;white-space:nowrap}
+.tick-item{font-family:var(--mono);font-size:11px;color:var(--white3);padding:0 36px;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tdot{width:4px;height:4px;background:var(--gold);border-radius:50%;flex-shrink:0}
+@keyframes tickmov{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* STATS */
+.stats{background:var(--black2);padding:0}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.stat-cell{background:var(--black2);padding:48px 28px;text-align:center;transition:background .3s}
+.stat-cell:hover{background:var(--black3)}
+.stat-ico{font-size:22px;margin-bottom:18px;opacity:.65}
+.stat-n{font-family:var(--display);font-size:52px;font-weight:800;color:var(--gold2);line-height:1;margin-bottom:8px}
+.stat-l{font-family:var(--mono);font-size:9px;color:var(--white3);letter-spacing:2.5px;text-transform:uppercase}
+
+/* SECTIONS */
+section{padding:110px 5%}
+.sec-lbl{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.sec-lbl::after{content:'';width:36px;height:1px;background:var(--gold)}
+.sec-h{font-family:var(--display);font-size:clamp(30px,4vw,54px);font-weight:800;line-height:1.05;letter-spacing:-1px}
+.sec-h span{color:var(--gold2)}
+.sec-p{margin-top:14px;font-size:15px;color:var(--white3);line-height:1.8;max-width:480px}
+
+/* SERVICES */
+.services{background:var(--black)}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:56px}
+.srv-card{background:var(--black);padding:42px 36px;position:relative;overflow:hidden;transition:background .35s;cursor:none}
+.srv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transform-origin:center;transition:transform .4s}
+.srv-card:hover{background:var(--black3)}
+.srv-card:hover::before{transform:scaleX(1)}
+.srv-n{font-family:var(--mono);font-size:11px;color:var(--white4);letter-spacing:2px;margin-bottom:24px}
+.srv-ico{font-size:38px;margin-bottom:20px;display:block;transition:transform .3s}
+.srv-card:hover .srv-ico{transform:scale(1.12)}
+.srv-card h3{font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:12px;color:#fff;letter-spacing:-.3px}
+.srv-card p{font-size:13.5px;color:var(--white3);line-height:1.8}
+.srv-arr{position:absolute;bottom:28px;right:28px;font-size:18px;color:var(--white4);transition:all .3s}
+.srv-card:hover .srv-arr{color:var(--gold);transform:translate(4px,-4px)}
+
+/* PRODUITS */
+.produits{background:var(--black2)}
+.prod-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:20px}
+.prod-filter{display:flex;gap:6px;flex-wrap:wrap}
+.fb{padding:8px 18px;border-radius:100px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--border);background:transparent;color:var(--white3);cursor:none;transition:all .2s}
+.fb.active,.fb:hover{border-color:var(--gold);background:var(--gold3);color:var(--gold2)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.prod-card{background:var(--black3);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .35s;cursor:none}
+.prod-card:hover{border-color:var(--border2);box-shadow:0 20px 60px rgba(201,168,76,.08);transform:translateY(-6px)}
+.prod-thumb{height:200px;position:relative;overflow:hidden;background:var(--black4);display:flex;align-items:center;justify-content:center}
+.prod-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s;opacity:.88}
+.prod-card:hover .prod-thumb img{transform:scale(1.07)}
+.prod-emoji{font-size:74px;line-height:1;filter:drop-shadow(0 0 18px rgba(201,168,76,.2))}
+.prod-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--black3) 0%,transparent 55%)}
+.pbadge{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:100px}
+.bn{background:rgba(255,59,59,.15);color:#ff6b6b;border:1px solid rgba(255,59,59,.25)}
+.bp{background:rgba(201,168,76,.15);color:var(--gold2);border:1px solid var(--border2)}
+.bt{background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--border)}
+.prod-body{padding:18px 20px 0}
+.prod-body h3{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.prod-body p{font-size:12.5px;color:var(--white3);line-height:1.65}
+.prod-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 18px}
+.prod-price{font-family:var(--display);font-size:18px;font-weight:800;color:var(--gold2)}
+.prod-price small{display:block;font-family:var(--mono);font-size:9px;color:var(--white3);font-weight:400;letter-spacing:1px}
+.btn-buy{background:var(--glass2);border:1px solid var(--border2);color:var(--gold2);padding:9px 16px;border-radius:8px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:all .2s}
+.btn-buy:hover{background:var(--gold3);border-color:var(--gold)}
+.prod-loading{grid-column:1/-1;text-align:center;padding:80px;color:var(--white3);font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.skel{background:var(--black3);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.skel-i{height:200px;background:var(--black4);position:relative;overflow:hidden}
+.skel-i::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--glass3),transparent);animation:shim 1.5s infinite}
+.skel-b{padding:20px}
+.skel-l{height:12px;border-radius:4px;background:var(--black5);margin-bottom:10px;position:relative;overflow:hidden}
+.skel-l::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--glass3),transparent);animation:shim 1.5s infinite}
+.skel-l.s{width:60%}.skel-l.xs{width:40%}
+@keyframes shim{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* SHOWCASE */
+.showcase{background:var(--black);padding:100px 0;overflow:hidden}
+.showcase-hdr{padding:0 5%;margin-bottom:56px}
+.sc-wrap{display:flex;gap:16px;padding:0 5%;animation:scslide 35s linear infinite}
+.sc-wrap:hover{animation-play-state:paused}
+.sc-item{min-width:240px;height:300px;background:var(--black3);border:1px solid var(--border);border-radius:20px;flex-shrink:0;overflow:hidden;position:relative;transition:all .35s;cursor:none}
+.sc-item:hover{border-color:var(--border2);transform:scale(1.04)}
+.sc-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:82px;background:var(--black4);transition:transform .4s}
+.sc-item:hover .sc-emoji{transform:scale(1.12) translateY(-10px)}
+.sc-item img{width:100%;height:100%;object-fit:cover;filter:brightness(.65);transition:filter .4s}
+.sc-item:hover img{filter:brightness(.45)}
+.sc-info{position:absolute;bottom:0;left:0;right:0;padding:18px;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 100%)}
+.sc-info h4{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:4px}
+.sc-info span{font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
+@keyframes scslide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* POURQUOI */
+.why{background:var(--black2)}
+.why-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:60px;align-items:start}
+.why-list{display:flex;flex-direction:column}
+.why-row{display:flex;gap:18px;align-items:flex-start;padding:28px 16px;border-bottom:1px solid var(--border);transition:background .2s;border-radius:8px}
+.why-row:last-child{border-bottom:none}
+.why-row:hover{background:var(--glass)}
+.why-idx{font-family:var(--mono);font-size:11px;color:var(--white4);min-width:26px;margin-top:3px}
+.why-ico{width:44px;height:44px;flex-shrink:0;background:var(--gold4);border:1px solid var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;transition:transform .3s}
+.why-row:hover .why-ico{transform:scale(1.1)}
+.why-row h4{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:5px}
+.why-row p{font-size:13px;color:var(--white3);line-height:1.7}
+.why-side{position:sticky;top:100px;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:var(--black3)}
+.why-img{height:300px;position:relative;overflow:hidden;background:var(--black4);display:flex;align-items:center;justify-content:center;font-size:80px}
+.why-img img{width:100%;height:100%;object-fit:cover;opacity:.7}
+.why-img-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--black3) 0%,transparent 60%)}
+.why-side-body{padding:28px}
+.why-side-body h3{font-family:var(--display);font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:10px}
+.why-side-body p{font-size:13.5px;color:var(--white3);line-height:1.8}
+.why-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.wtag{padding:6px 14px;border-radius:100px;background:var(--glass2);border:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--white3);letter-spacing:1px;text-transform:uppercase}
+
+/* TÉMOIGNAGES */
+.temoignages{background:var(--black)}
+.temo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.temo-card{background:var(--black3);border:1px solid var(--border);border-radius:16px;padding:32px;transition:all .3s;position:relative;overflow:hidden}
+.temo-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3),transparent);opacity:0;transition:opacity .3s}
+.temo-card:hover{border-color:var(--border2);transform:translateY(-4px)}
+.temo-card:hover::after{opacity:1}
+.temo-stars{color:var(--gold);font-size:12px;letter-spacing:2px;margin-bottom:16px}
+.temo-txt{font-size:13.5px;color:var(--white2);line-height:1.85;font-style:italic;margin-bottom:24px}
+.temo-auth{display:flex;align-items:center;gap:12px}
+.temo-av{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#5a3800);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;color:#000;flex-shrink:0}
+.temo-auth h5{font-size:13px;font-weight:700;margin-bottom:2px}
+.temo-auth span{font-family:var(--mono);font-size:10px;color:var(--white3);letter-spacing:1px}
+
+/* CONTACT */
+.contact{background:var(--black2)}
+.contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:70px;margin-top:60px}
+.contact-info h3{font-family:var(--display);font-size:20px;font-weight:800;color:var(--gold2);margin-bottom:28px}
+.ci-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding:16px;border-radius:12px;border:1px solid transparent;transition:all .25s}
+.ci-row:hover{background:var(--glass);border-color:var(--border)}
+.ci-ico{width:42px;height:42px;flex-shrink:0;background:var(--gold4);border:1px solid var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ci-row h5{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.ci-row p,.ci-row a{font-size:14px;color:var(--white2);text-decoration:none;line-height:1.6}
+.ci-row a:hover{color:var(--gold2)}
+.csocs{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.csoc{display:flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--glass);color:var(--white2);transition:all .2s;font-family:var(--sans)}
+.csoc:hover{border-color:var(--gold);background:var(--gold4);color:var(--gold2)}
+.hours{margin-top:24px;padding:20px;border:1px solid var(--border);border-radius:12px;background:var(--glass)}
+.hours h5{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:14px}
+.hrow{display:flex;justify-content:space-between;font-size:13px;color:var(--white3);padding:7px 0;border-bottom:1px solid var(--border)}
+.hrow:last-child{border-bottom:none}
+.hrow span{color:var(--white2);font-weight:500}
+.cform{display:flex;flex-direction:column;gap:14px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:7px}
+.fg label{font-family:var(--mono);font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:2px;color:var(--gold)}
+.fg input,.fg textarea,.fg select{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:#fff;font-family:var(--sans);font-size:14px;transition:border-color .2s,background .2s;outline:none}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--white4)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--gold);background:var(--gold4)}
+.fg select option{background:#0a0a0a}
+.fg textarea{height:120px;resize:vertical}
+.fbtn{background:linear-gradient(135deg,var(--gold),#8a5c00);color:#000;border:none;padding:15px 32px;border-radius:10px;font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px}
+.fbtn:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(201,168,76,.35)}
+.fbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.fok{display:none;text-align:center;padding:28px;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);border-radius:12px}
+.fok .fok-ico{font-size:40px;display:block;margin-bottom:10px}
+
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid var(--border);padding:70px 5% 28px}
+.fg-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:48px;margin-bottom:56px}
+.fb-logo{width:48px;height:48px;border-radius:12px;border:1px solid var(--border2);overflow:hidden;background:var(--black4);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.fb-logo img{width:100%;height:100%;object-fit:cover}
+.fb-logo .gnf{font-family:var(--display);font-size:15px;font-weight:800;color:var(--gold)}
+.fg-brand h2{font-family:var(--display);font-size:18px;font-weight:800;color:var(--gold2);letter-spacing:2px;margin-bottom:10px}
+.fg-brand p{font-size:13px;color:var(--white3);line-height:1.8;max-width:280px;margin-bottom:18px}
+.fsocs{display:flex;gap:8px}
+.fsoc{width:36px;height:36px;border-radius:8px;background:var(--glass2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:16px;transition:all .2s}
+.fsoc:hover{background:var(--gold4);border-color:var(--gold);transform:translateY(-2px)}
+.fcol h4{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:18px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fcol ul a{text-decoration:none;font-size:13px;color:var(--white3);transition:color .2s;display:flex;align-items:center;gap:8px}
+.fcol ul a:hover{color:var(--gold2)}
+.fcol ul a::before{content:'—';font-size:10px;color:var(--white4)}
+.fcontacts{display:flex;flex-direction:column;gap:12px}
+.fc{display:flex;gap:10px;font-size:12.5px;color:var(--white3);align-items:flex-start}
+.fc a{color:var(--white3);text-decoration:none;transition:color .2s}
+.fc a:hover{color:var(--gold2)}
+.fbot{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.fbot p{font-family:var(--mono);font-size:11px;color:var(--white4);letter-spacing:.5px}
+.apill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:5px 14px;border-radius:100px;background:var(--glass);border:1px solid var(--border);color:var(--white3)}
+.apill.on{border-color:rgba(37,211,102,.3);color:var(--green)}
+
+/* WA FLOAT */
+.wafloat{position:fixed;bottom:28px;right:28px;z-index:800;width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 30px rgba(37,211,102,.4);transition:transform .2s;animation:wap 2.5s ease infinite}
+.wafloat:hover{transform:scale(1.12)}
+.watip{position:absolute;right:66px;background:var(--black3);border:1px solid var(--border);color:#fff;padding:8px 14px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;font-family:var(--mono);letter-spacing:1px;opacity:0;transform:translateX(8px);transition:all .25s;pointer-events:none}
+.wafloat:hover .watip{opacity:1;transform:translateX(0)}
+@keyframes wap{0%,100%{box-shadow:0 4px 30px rgba(37,211,102,.4)}50%{box-shadow:0 4px 50px rgba(37,211,102,.65)}}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.prod-grid{grid-template-columns:repeat(3,1fr)}.fg-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.nav-links{display:none}.hamburger{display:flex}.srv-grid{grid-template-columns:1fr}.why-layout{grid-template-columns:1fr}.why-side{position:static}.temo-grid{grid-template-columns:1fr}.contact-layout{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}.prod-grid{grid-template-columns:1fr 1fr}body{cursor:auto}.cursor,.cursor-ring{display:none}}
+@media(max-width:600px){.prod-grid{grid-template-columns:1fr}.frow{grid-template-columns:1fr}.fg-grid{grid-template-columns:1fr}section{padding:70px 5%}.hero-content{padding:120px 5% 80px}.stats-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- PRELOADER
+     ═══════════════════════════════════════════════════════════
+     Pour mettre ta photo de machine/PS5/manette au démarrage :
+     1. Place ta photo dans images/hero.jpg
+     2. Dans la div .pre-frame, décommente la balise img
+     3. Supprime la div .pre-icons
+     ═══════════════════════════════════════════════════════════ -->
+<div id="preloader">
+  <div class="pre-frame">
+    <img src="images/boutique.jpg" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:18px;opacity:0.85"/>
+    <!--
+    <img src="images/hero.jpg" alt="Gamer Network"/>
+    <div class="pre-overlay">
+    -->
+    <div style="text-align:center;margin-top:8px">
+      <div class="pre-title">GAMER NETWORK</div>
+      <div class="pre-sub">Yaoundé · Cameroun</div>
+    </div>
+  </div>
+  <div class="pre-bar"></div>
+  <div class="pre-sub">Initialisation...</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <div class="nav-logo">
+        <span class="gn">GN</span>
+        <!-- <img src="images/logo.jpg" alt="logo"/> -->
+      </div>
+      <div>
+        <div class="nav-title">GAMER <span>NETWORK</span></div>
+        <div class="nav-loc">📍 Yaoundé · Cameroun</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#produits">Produits</a>
+      <a href="#showcase">Catalogue</a>
+      <a href="#pourquoi">À propos</a>
+      <a href="#temoignages">Avis</a>
+      <a href="https://wa.me/237681384185" class="nav-wa" target="_blank">💬 WhatsApp</a>
+    </div>
+    <div class="hamburger" id="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#produits" onclick="closeMenu()">Produits</a>
+  <a href="#showcase" onclick="closeMenu()">Catalogue</a>
+  <a href="#pourquoi" onclick="closeMenu()">À propos</a>
+  <a href="#temoignages" onclick="closeMenu()">Avis</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="https://wa.me/237681384185" target="_blank" style="color:var(--green)">💬 WhatsApp</a>
+</div>
+
+<!-- HERO
+     ═══════════════════════════════════════════════════════════
+     Photo de fond : place ta photo dans images/hero-bg.jpg
+     Retire la classe "no-bg" de .hero-bg et décommente img
+     ═══════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg">
+    <img src="images/hero-bg.jpg" alt="Gaming Setup"/>
+  </div>
+  <div class="hero-vignette"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Boutique Tech &amp; Gaming · Yaoundé</div>
+    <h1 class="hero-h1">
+      Excellence
+      <span class="gline">Digitale</span>
+      <span class="sline">Mfoundi Mall · Btq R53 · Avenue Kennedy</span>
+    </h1>
+    <p class="hero-p">Laptops, PS5, manettes, smartphones, casques, Suite Office — tout l'univers tech au même endroit. <b>7 ans d'expertise</b> au service des gamers et professionnels camerounais.</p>
+    <div class="hero-btns">
+      <a href="#produits" class="btn btn-gold">🛒 Voir les produits</a>
+      <a href="#services" class="btn btn-out">⚙️ Nos services</a>
+      <a href="https://wa.me/237681384185" class="btn btn-wa2" target="_blank">💬 WhatsApp</a>
+    </div>
+    <div class="hero-pills">
+      <a href="tel:+237656011438" class="pill"><span class="pdot y"></span> 656 01 14 38</a>
+      <a href="https://wa.me/237681384185" class="pill" target="_blank"><span class="pdot g"></span> 681 38 41 85</a>
+      <div class="pill">📍 Btq R53 · Mfoundi Mall</div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-bar"></div><span class="scroll-txt">Scroll</span></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tick-track">
+    <span class="tick-item"><span class="tdot"></span>Laptops &amp; PC Gaming</span>
+    <span class="tick-item"><span class="tdot"></span>PS5 · Xbox · Manettes</span>
+    <span class="tick-item"><span class="tdot"></span>Smartphones Android</span>
+    <span class="tick-item"><span class="tdot"></span>Maintenance &amp; Réparation</span>
+    <span class="tick-item"><span class="tdot"></span>Suite Office &amp; Logiciels</span>
+    <span class="tick-item"><span class="tdot"></span>Casques Gaming</span>
+    <span class="tick-item"><span class="tdot"></span>Téléchargement Jeux &amp; Films</span>
+    <span class="tick-item"><span class="tdot"></span>Mobile Money Accepté</span>
+    <span class="tick-item"><span class="tdot"></span>Laptops &amp; PC Gaming</span>
+    <span class="tick-item"><span class="tdot"></span>PS5 · Xbox · Manettes</span>
+    <span class="tick-item"><span class="tdot"></span>Smartphones Android</span>
+    <span class="tick-item"><span class="tdot"></span>Maintenance &amp; Réparation</span>
+    <span class="tick-item"><span class="tdot"></span>Suite Office &amp; Logiciels</span>
+    <span class="tick-item"><span class="tdot"></span>Casques Gaming</span>
+    <span class="tick-item"><span class="tdot"></span>Téléchargement Jeux &amp; Films</span>
+    <span class="tick-item"><span class="tdot"></span>Mobile Money Accepté</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-row">
+    <div class="stat-cell reveal"><div class="stat-ico">🏆</div><div class="stat-n" data-target="500">0</div><div class="stat-l">Clients satisfaits</div></div>
+    <div class="stat-cell reveal"><div class="stat-ico">📅</div><div class="stat-n" data-target="7">0</div><div class="stat-l">Années d'expérience</div></div>
+    <div class="stat-cell reveal"><div class="stat-ico">📦</div><div class="stat-n" data-target="1000">0</div><div class="stat-l">Produits vendus</div></div>
+    <div class="stat-cell reveal"><div class="stat-ico">⚡</div><div class="stat-n">24h</div><div class="stat-l">Délai intervention</div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="reveal"><div class="sec-lbl">01 — Services</div><h2 class="sec-h">Ce que nous <span>proposons</span></h2><p class="sec-p">Tout l'écosystème tech en un seul endroit à Yaoundé.</p></div>
+  <div class="srv-grid" id="srvGrid">
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+    <div class="srv-card" style="height:200px;background:var(--black3)"></div>
+  </div>
+</section>
+
+<!-- PRODUITS
+     ═══════════════════════════════════════════════════════════════
+     GUIDE AJOUT DE PHOTOS AUX PRODUITS (via SQLite) :
+
+     1. Ajouter la colonne image dans ta base :
+        ALTER TABLE produits ADD COLUMN image TEXT;
+
+     2. Mettre à jour chaque produit avec le chemin de la photo :
+        UPDATE produits SET image='images/laptop.jpg' WHERE id=1;
+        UPDATE produits SET image='images/ps5.jpg'    WHERE id=7;
+
+     3. Placer tes photos dans le dossier images/ à côté de index.html
+
+     L'API retourne le champ image et le site affiche la photo automatiquement !
+     Si pas de photo → l'emoji s'affiche à la place.
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="produits" id="produits">
+  <div class="prod-hdr">
+    <div class="reveal"><div class="sec-lbl">02 — Catalogue</div><h2 class="sec-h">Nos <span>Produits</span></h2></div>
+    <div class="prod-filter reveal" id="filterBar">
+      <button class="fb active" onclick="fp(this,'all')">Tout</button>
+      <button class="fb" onclick="fp(this,'laptop')">Laptops</button>
+      <button class="fb" onclick="fp(this,'desktop')">Desktops</button>
+      <button class="fb" onclick="fp(this,'phone')">Téléphones</button>
+      <button class="fb" onclick="fp(this,'gaming')">Gaming</button>
+      <button class="fb" onclick="fp(this,'accessoire')">Accessoires</button>
+      <button class="fb" onclick="fp(this,'logiciel')">Logiciels</button>
+    </div>
+  </div>
+  <div class="prod-grid" id="prodGrid">
+    <div class="skel"><div class="skel-i"></div><div class="skel-b"><div class="skel-l"></div><div class="skel-l s"></div><div class="skel-l xs"></div></div></div>
+    <div class="skel"><div class="skel-i"></div><div class="skel-b"><div class="skel-l"></div><div class="skel-l s"></div><div class="skel-l xs"></div></div></div>
+    <div class="skel"><div class="skel-i"></div><div class="skel-b"><div class="skel-l"></div><div class="skel-l s"></div><div class="skel-l xs"></div></div></div>
+    <div class="skel"><div class="skel-i"></div><div class="skel-b"><div class="skel-l"></div><div class="skel-l s"></div><div class="skel-l xs"></div></div></div>
+  </div>
+</section>
+
+<!-- SHOWCASE CAROUSEL
+     ══════════════════════════════════════════════
+     Pour mettre une vraie photo dans le carousel :
+     Remplace le div.sc-emoji par :
+     <img class="sc-item img" src="images/ps5.jpg"/>
+     ══════════════════════════════════════════════ -->
+<section class="showcase" id="showcase">
+  <div class="showcase-hdr reveal"><div class="sec-lbl">03 — Gamme</div><h2 class="sec-h">On a <span>tout ça</span></h2></div>
+  <div class="sc-wrap">
+    <div class="sc-item"><div class="sc-emoji">💻</div><div class="sc-info"><h4>Laptops Gaming</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖥️</div><div class="sc-info"><h4>PC Bureau</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">📱</div><div class="sc-info"><h4>Smartphones</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🎮</div><div class="sc-info"><h4>PlayStation &amp; Xbox</h4><span>Disponible</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🎧</div><div class="sc-info"><h4>Casques Gaming</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">💽</div><div class="sc-info"><h4>Suite Office</h4><span>Installation</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🕹️</div><div class="sc-info"><h4>Jeux Vidéo PC</h4><span>Téléchargement</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">📺</div><div class="sc-info"><h4>Écrans &amp; TV</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖱️</div><div class="sc-info"><h4>Souris &amp; Claviers</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖨️</div><div class="sc-info"><h4>Imprimantes</h4><span>En stock</span></div></div>
+    <!-- dupliqué pour boucle -->
+    <div class="sc-item"><div class="sc-emoji">💻</div><div class="sc-info"><h4>Laptops Gaming</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖥️</div><div class="sc-info"><h4>PC Bureau</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">📱</div><div class="sc-info"><h4>Smartphones</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🎮</div><div class="sc-info"><h4>PlayStation &amp; Xbox</h4><span>Disponible</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🎧</div><div class="sc-info"><h4>Casques Gaming</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">💽</div><div class="sc-info"><h4>Suite Office</h4><span>Installation</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🕹️</div><div class="sc-info"><h4>Jeux Vidéo PC</h4><span>Téléchargement</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">📺</div><div class="sc-info"><h4>Écrans &amp; TV</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖱️</div><div class="sc-info"><h4>Souris &amp; Claviers</h4><span>En stock</span></div></div>
+    <div class="sc-item"><div class="sc-emoji">🖨️</div><div class="sc-info"><h4>Imprimantes</h4><span>En stock</span></div></div>
+  </div>
+</section>
+
+<!-- POURQUOI -->
+<section class="why" id="pourquoi">
+  <div class="reveal"><div class="sec-lbl">04 — Différence</div><h2 class="sec-h">Pourquoi <span>Gamer Network</span> ?</h2></div>
+  <div class="why-layout">
+    <div class="why-list">
+      <div class="why-row reveal"><div class="why-idx">01</div><div class="why-ico">🎯</div><div><h4>Expertise reconnue</h4><p>Plus de 7 ans d'expérience. Techniciens certifiés, résolution rapide de tous vos problèmes.</p></div></div>
+      <div class="why-row reveal"><div class="why-idx">02</div><div class="why-ico">💰</div><div><h4>Meilleurs prix du marché</h4><p>Négociation directe fournisseurs. Les tarifs les plus accessibles du Cameroun, garantis.</p></div></div>
+      <div class="why-row reveal"><div class="why-idx">03</div><div class="why-ico">⚡</div><div><h4>Intervention sous 24h</h4><p>Devis gratuit, réponse WhatsApp rapide. Disponibles même le week-end.</p></div></div>
+      <div class="why-row reveal"><div class="why-idx">04</div><div class="why-ico">🛡️</div><div><h4>Garantie &amp; après-vente</h4><p>Tous nos produits avec garantie. Suivi personnalisé après votre achat.</p></div></div>
+      <div class="why-row reveal"><div class="why-idx">05</div><div class="why-ico">🤝</div><div><h4>Paiement flexible</h4><p>Cash, Orange Money, MTN MoMo. Facilités de paiement disponibles.</p></div></div>
+    </div>
+    <div class="why-side reveal">
+      <div class="why-img">
+        <img src="images/boutique.jpg" style="position:absolute;inset:0"/>
+      </div>
+        🏪
+        <!-- <img src="images/boutique.jpg" alt="boutique"/> -->
+        <div class="why-img-ov"></div>
+      </div>
+      <div class="why-side-body">
+        <h3>Gamer Network</h3>
+        <p>La boutique tech de référence à Yaoundé. Étudiants, gamers, professionnels — nous avons ce qu'il vous faut, au prix juste.</p>
+        <div class="why-tags">
+          <span class="wtag">✅ Certifié</span><span class="wtag">🚀 Rapide</span><span class="wtag">💯 Fiable</span><span class="wtag">🇨🇲 Camerounais</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section class="temoignages" id="temoignages">
+  <div class="reveal"><div class="sec-lbl">05 — Avis</div><h2 class="sec-h">Ils nous font <span>confiance</span></h2></div>
+  <div class="temo-grid" id="temoGrid">
+    <div class="skel" style="height:190px;border-radius:16px"></div>
+    <div class="skel" style="height:190px;border-radius:16px"></div>
+    <div class="skel" style="height:190px;border-radius:16px"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal"><div class="sec-lbl">06 — Contact</div><h2 class="sec-h">Parlons-nous <span>maintenant</span></h2><p class="sec-p">Réponse garantie en moins d'une heure sur WhatsApp.</p></div>
+  <div class="contact-layout">
+    <div class="reveal">
+      <h3>Nos coordonnées</h3>
+      <div class="ci-row"><div class="ci-ico">📍</div><div><h5>Adresse</h5><p>Avenue Kennedy, face ancien maison Orange<br>Centre Commercial Mfoundi Mall — Boutique <strong>R53</strong><br>Yaoundé, Cameroun</p></div></div>
+      <div class="ci-row"><div class="ci-ico">📞</div><div><h5>Téléphone</h5><a href="tel:+237656011438">+237 656 01 14 38</a></div></div>
+      <div class="ci-row"><div class="ci-ico">💬</div><div><h5>WhatsApp</h5><a href="https://wa.me/237681384185" target="_blank">+237 681 38 41 85</a></div></div>
+      <div class="ci-row"><div class="ci-ico">✉️</div><div><h5>Email</h5><a href="mailto:kamdememmanuel10@gmail.com">kamdememmanuel10@gmail.com</a></div></div>
+      <div class="ci-row"><div class="ci-ico">📘</div><div><h5>Facebook</h5><a href="https://facebook.com/camernet.work" target="_blank">camernet work</a></div></div>
+      <div class="csocs">
+        <a href="https://wa.me/237681384185" class="csoc" target="_blank">💬 WhatsApp</a>
+        <a href="https://facebook.com/camernet.work" class="csoc" target="_blank">📘 Facebook</a>
+        <a href="mailto:kamdememmanuel10@gmail.com" class="csoc">✉️ Email</a>
+      </div>
+      <div class="hours">
+        <h5>Horaires d'ouverture</h5>
+        <div class="hrow">Lundi – Vendredi<span>08h00 – 19h00</span></div>
+        <div class="hrow">Samedi<span>08h00 – 18h00</span></div>
+        <div class="hrow">Dimanche<span>10h00 – 15h00</span></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="cform" id="contactForm" onsubmit="submitForm(event)">
+        <div class="frow">
+          <div class="fg"><label>Nom *</label><input type="text" id="fname" placeholder="Grace Lamax" required/></div>
+          <div class="fg"><label>Téléphone *</label><input type="tel" id="fphone" placeholder="+237 6XX XXX XXX" required/></div>
+        </div>
+        <div class="fg"><label>Sujet</label>
+          <select id="fsujet">
+            <option>Demande de devis</option><option>Maintenance / Réparation</option>
+            <option>Achat de matériel</option><option>Téléchargement Jeux / Films</option>
+            <option>Installation Logiciels</option><option>Autre demande</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea id="fmsg" placeholder="Décrivez votre besoin..."></textarea></div>
+        <button type="submit" class="fbtn" id="fBtn"><span>Envoyer le message</span><span>→</span></button>
+      </form>
+      <div class="fok" id="formOk"><span class="fok-ico">✅</span><p><strong>Message envoyé !</strong><br>Nous vous répondons rapidement via WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg-grid">
+    <div class="fg-brand">
+      <div class="fb-logo"><span class="gnf">GN</span><!-- <img src="images/logo.jpg"/> --></div>
+      <h2>GAMER NETWORK</h2>
+      <p>La boutique tech &amp; gaming de confiance à Yaoundé. Spécialistes vente, maintenance et conseil informatique depuis 7 ans.</p>
+      <div class="fsocs">
+        <a href="https://wa.me/237681384185" class="fsoc" target="_blank">💬</a>
+        <a href="https://facebook.com/camernet.work" class="fsoc" target="_blank">📘</a>
+        <a href="mailto:kamdememmanuel10@gmail.com" class="fsoc">✉️</a>
+        <a href="tel:+237656011438" class="fsoc">📞</a>
+      </div>
+    </div>
+    <div class="fcol"><h4>Navigation</h4><ul><li><a href="#services">Nos Services</a></li><li><a href="#produits">Nos Produits</a></li><li><a href="#showcase">Catalogue</a></li><li><a href="#pourquoi">À propos</a></li><li><a href="#temoignages">Avis clients</a></li></ul></div>
+    <div class="fcol"><h4>Services</h4><ul><li><a href="#services">Vente Laptops &amp; PC</a></li><li><a href="#services">Réparation</a></li><li><a href="#services">Téléchargement</a></li><li><a href="#services">Suite Office</a></li><li><a href="#services">Conseil</a></li></ul></div>
+    <div class="fcol"><h4>Contact</h4><div class="fcontacts"><div class="fc"><span>📍</span><span>Mfoundi Mall Btq R53, Av. Kennedy, Yaoundé</span></div><div class="fc"><span>📞</span><a href="tel:+237656011438">656 01 14 38</a></div><div class="fc"><span>💬</span><a href="https://wa.me/237681384185" target="_blank">681 38 41 85</a></div><div class="fc"><span>✉️</span><a href="mailto:kamdememmanuel10@gmail.com">kamdememmanuel10@gmail.com</a></div></div></div>
+  </div>
+  <div class="fbot">
+    <p>© 2025 GAMER NETWORK · Yaoundé, Cameroun · Tous droits réservés</p>
+    <span class="apill" id="apill">● Chargement...</span>
+  </div>
+</footer>
+
+<a href="https://wa.me/237681384185" class="wafloat" target="_blank">💬<span class="watip">Écrire sur WhatsApp</span></a>
+
+<script>
+const API=window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'?'http://localhost:5000/api':'https://gamer-network-api.onrender.com/api';
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ac(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(ac)})();
+document.querySelectorAll('a,button,.fb,.btn-buy,.fbtn,.btn-gold,.btn-out,.btn-wa2').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';curR.style.width='54px';curR.style.height='54px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';curR.style.width='36px';curR.style.height='36px'});
+});
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('preloader').classList.add('hide'),2200));
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+function toggleMenu(){document.getElementById('ham').classList.toggle('open');document.getElementById('mobMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('mobMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('ham').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow='';}
+const ro=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+const co=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,t=+el.dataset.target;if(!t)return;let c=0;const s=Math.ceil(t/60);const ti=setInterval(()=>{c=Math.min(c+s,t);el.textContent=c.toLocaleString('fr-FR')+'+';if(c>=t)clearInterval(ti);},22);co.unobserve(el);});},{threshold:.5});
+document.querySelectorAll('.stat-n[data-target]').forEach(el=>co.observe(el));
+const SF=[{emoji:'🖥️',titre:'Vente Laptop & Desktop',description:'Large sélection dordinateurs neufs et reconditionnés aux meilleurs prix.'},{emoji:'📱',titre:'Téléphones & Cartes Graphiques',description:'Smartphones Android toutes marques, cartes graphiques pour PC gaming.'},{emoji:'🔧',titre:'Maintenance & Réparation',description:'Diagnostic, réparation logicielle et matérielle. Devis gratuit.'},{emoji:'🎮',titre:'Téléchargement Jeux, Séries & Films',description:'Jeux PC/PS, séries, films, logiciels — téléchargement et installation inclus.'},{emoji:'💽',titre:'Suite Office & Logiciels',description:'Installation Microsoft Office, antivirus, logiciels de graphisme.'},{emoji:'💡',titre:'Conseil & Étude Informatique',description:'Accompagnement personnalisé pour le choix et la configuration du matériel.'}];
+async function loadSrv(){const g=document.getElementById('srvGrid');let d=SF;try{const r=await fetch(`${API}/services`);const j=await r.json();if(j.success&&j.data.length)d=j.data;}catch{}g.innerHTML=d.map((s,i)=>`<div class="srv-card reveal"><div class="srv-n">0${i+1}</div><span class="srv-ico">${s.emoji}</span><h3>${s.titre}</h3><p>${s.description}</p><div class="srv-arr">↗</div></div>`).join('');g.querySelectorAll('.reveal').forEach(el=>ro.observe(el));}
+const PF=[{nom:'Laptop Gaming 15"',description:'Core i7, 16GB RAM, RTX 3060, 512GB SSD',prix:450000,categorie:'laptop',emoji:'💻',badge:'NOUVEAU',image:''},{nom:'PC Bureau Complet',description:'Core i5, 8GB RAM, 256GB SSD + Écran 22"',prix:280000,categorie:'desktop',emoji:'🖥️',badge:'PROMO',image:''},{nom:'Smartphone Android',description:'6.7", 128GB, 5000mAh, Triple caméra 64MP',prix:120000,categorie:'phone',emoji:'📱',badge:'PROMO',image:''},{nom:'Manette Xbox Series X',description:'Sans fil, compatible PC & Xbox, autonomie 40h',prix:35000,categorie:'gaming',emoji:'🎮',badge:null,image:''},{nom:'Casque Gaming Pro',description:'Son 7.1, micro antibruit, LED RGB',prix:28000,categorie:'gaming',emoji:'🎧',badge:'TOP',image:''},{nom:'Écran LED 24" Full HD',description:'1920x1080, 75Hz, HDMI+VGA',prix:95000,categorie:'accessoire',emoji:'📺',badge:null,image:''},{nom:'Pack Clavier + Souris',description:'Sans fil, autonomie longue durée',prix:18000,categorie:'accessoire',emoji:'🖱️',badge:null,image:''},{nom:'Suite Office 2021',description:'Word, Excel, PowerPoint — installation incluse',prix:15000,categorie:'logiciel',emoji:'💽',badge:null,image:''}];
+let AP=[];
+async function loadProds(){try{const r=await fetch(`${API}/produits`);const j=await r.json();if(j.success&&j.data.length){AP=j.data;}else throw 0;}catch{AP=PF;}renderProds(AP);}
+function bc(b){if(!b)return'';const u=b.toUpperCase();return u==='NOUVEAU'?'bn':u==='PROMO'?'bp':'bt';}
+function renderProds(list){
+  const g=document.getElementById('prodGrid');
+  if(!list.length){g.innerHTML='<div class="prod-loading">Aucun produit.</div>';return;}
+  g.innerHTML=list.map(p=>{
+    const th=p.image?`<img src="${p.image}" alt="${p.nom}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="prod-emoji" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:74px">${p.emoji}</div>`:`<div class="prod-emoji">${p.emoji}</div>`;
+    return`<div class="prod-card" data-cat="${p.categorie}" style="opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s"><div class="prod-thumb">${th}<div class="prod-overlay"></div>${p.badge?`<span class="pbadge ${bc(p.badge)}">${p.badge}</span>`:''}</div><div class="prod-body"><h3>${p.nom}</h3><p>${p.description}</p></div><div class="prod-foot"><div class="prod-price">${parseInt(p.prix).toLocaleString('fr-FR')} F<small>CFA</small></div><button class="btn-buy" onclick="cWa('${p.nom.replace(/'/g,"\'")}')">Commander →</button></div></div>`;
+  }).join('');
+  setTimeout(()=>g.querySelectorAll('.prod-card').forEach((c,i)=>setTimeout(()=>{c.style.opacity='1';c.style.transform='translateY(0)';},i*65)),50);
+}
+function fp(btn,cat){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProds(cat==='all'?AP:AP.filter(p=>p.categorie===cat));}
+const TF=[{auteur:'GRACE K.',role:'Étudiant · Univ. Yaoundé I',note:5,contenu:'Laptop gaming acheté ici. Prix honnête, livraison rapide, tout installé sur place. Je recommande !'},{auteur:'FRANCK K.',role:'Comptable · Yaoundé',note:5,contenu:'PC et installation réparés en une journée. Personnel professionnel, disponible sur WhatsApp. Service impeccable.'},{auteur:'EMMA Kamdem',role:'Etudiant informatique',note:4,contenu:'Meilleure boutique tech à Yaoundé. Jy viens depuis 2 ans. Toujours du bon stock.'}];
+async function loadTemos(){const g=document.getElementById('temoGrid');let d=TF;try{const r=await fetch(`${API}/temoignages`);const j=await r.json();if(j.success&&j.data.length)d=j.data;}catch{}g.innerHTML=d.map(t=>{const ini=t.auteur.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();return`<div class="temo-card reveal"><div class="temo-stars">${'★'.repeat(t.note)}${'☆'.repeat(5-t.note)}</div><p class="temo-txt">« ${t.contenu} »</p><div class="temo-auth"><div class="temo-av">${ini}</div><div><h5>${t.auteur}</h5><span>${t.role||''}</span></div></div></div>`;}).join('');g.querySelectorAll('.reveal').forEach(el=>ro.observe(el));}
+async function submitForm(e){e.preventDefault();const btn=document.getElementById('fBtn');const nom=document.getElementById('fname').value,telephone=document.getElementById('fphone').value,sujet=document.getElementById('fsujet').value,message=document.getElementById('fmsg').value;btn.disabled=true;btn.innerHTML='<span>Envoi...</span><span>⏳</span>';try{const r=await fetch(`${API}/contact`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nom,telephone,sujet,message})});const j=await r.json();if(!j.success)throw 0;}catch{window.open(`https://wa.me/637681384185?text=${encodeURIComponent('*Message site web*' , '+nom+', '+telephone+', '+sujet+', '+message')}`,'_blank');}document.getElementById('contactForm').style.display='none';document.getElementById('formOk').style.display='block';setTimeout(()=>{document.getElementById('contactForm').style.display='flex';document.getElementById('formOk').style.display='none';document.getElementById('contactForm').reset();},5000);btn.disabled=false;btn.innerHTML='<span>Envoyer le message</span><span>→</span>';}
+function cWa(n){window.open(`https://wa.me/237681384185?text=${encodeURIComponent('Bonjour Gamer Network ! 👋Je suis intéressé(e) par : *'+n+'*')} Pouvez-vous me donner les infos de disponibilité et de prix ? Merci !')}`,'_blank');}
+
+async function checkApi(){const p=document.getElementById('apill');try{const r=await fetch(API.replace('/api',''),{signal:AbortSignal.timeout(3000)});if(r.ok){p.textContent='● API connectée';p.classList.add('on');}else throw 0;}catch{p.textContent='● Mode statique';}}
+window.addEventListener('scroll',()=>{let c='';document.querySelectorAll('section[id]').forEach(s=>{if(scrollY>=s.offsetTop-130)c=s.id;});document.querySelectorAll('.nav-links a').forEach(a=>a.style.color=a.getAttribute('href')==='#'+c?'var(--gold2)':'');});loadSrv();loadProds();loadTemos();checkApi();
+</script>
+</body>
+</html>
