@@ -328,9 +328,9 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:70px 5
      ═══════════════════════════════════════════════════════════ -->
 <div id="preloader">
   <div class="pre-frame">
-    <img src="images/ss.jpg" style="width:120%;height:120%;object-fit:cover;position:absolute;inset:0;border-radius:20px;opacity:0.95"/>
+    <img src="images/ss.png" style="width:120%;height:120%;object-fit:cover;position:absolute;inset:0;border-radius:20px;opacity:0.95"/>
     <!--
-    <img src="images/hero.jpg" alt="Gamer Network"/>
+    <img src="images/hero-bg.jpg" alt="Gamer Network"/>
     <div class="pre-overlay">
     -->
     <div style="text-align:center;margin-top:8px">
@@ -537,7 +537,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:70px 5
     </div>
     <div class="why-side reveal">
       <div class="why-img">
-        <img src="images/ss.jpg" style="position:absolute;inset:0"/>
+        <img src="images/ss.png" style="position:absolute;inset:0"/>
       </div>
         🏪
         <!-- rc="images/boutique.jpg" alt="boutique"/> -->
@@ -654,7 +654,7 @@ const co=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersec
 document.querySelectorAll('.stat-n[data-target]').forEach(el=>co.observe(el));
 const SF=[{emoji:'🖥️',titre:'Vente Laptop & Desktop',description:'Large sélection dordinateurs neufs et reconditionnés aux meilleurs prix.'},{emoji:'📱',titre:'Téléphones & Cartes Graphiques',description:'Smartphones Android toutes marques, cartes graphiques pour PC gaming.'},{emoji:'🔧',titre:'Maintenance & Réparation',description:'Diagnostic, réparation logicielle et matérielle. Devis gratuit.'},{emoji:'🎮',titre:'Téléchargement Jeux, Séries & Films',description:'Jeux PC/PS, séries, films, logiciels — téléchargement et installation inclus.'},{emoji:'💽',titre:'Suite Office & Logiciels',description:'Installation Microsoft Office, antivirus, logiciels de graphisme.'},{emoji:'💡',titre:'Conseil & Étude Informatique',description:'Accompagnement personnalisé pour le choix et la configuration du matériel.'}];
 async function loadSrv(){const g=document.getElementById('srvGrid');let d=SF;try{const r=await fetch(`${API}/services`);const j=await r.json();if(j.success&&j.data.length)d=j.data;}catch{}g.innerHTML=d.map((s,i)=>`<div class="srv-card reveal"><div class="srv-n">0${i+1}</div><span class="srv-ico">${s.emoji}</span><h3>${s.titre}</h3><p>${s.description}</p><div class="srv-arr">↗</div></div>`).join('');g.querySelectorAll('.reveal').forEach(el=>ro.observe(el));}
-const PF=[{nom:'IPhone 13"',description:'Batterie 90%, 256GB SSD, ultra rapide',prix:185000,categorie:'Telephone',emoji:'',badge:'EN SOLDE',image:'images/iphone13.jpg'},{nom:'Google pixel 5a',description:'5G, 8GB RAM, 128GB"',prix:80000,categorie:'Telephone',badge:'PROMO',image:'images/pixel5.jpg'},{nom:'Google pixel 8',description:'6.2", 128GB, 5000mAh, caméra magnifique',prix:170000,categorie:'phone',badge:'PROMO',image:'images/pixel8.jpg'},{nom:'Dell latitude 5300',description:'Intel Core I3 8em Generation,RAM 8go DDR4, ROM 256go SSD, 13.5 pouces Full HD, Windows 11 installé',categorie:'PC portable',badge:null,image:'images/boutique.jpg'},{nom:'Samsung Galaxy S23',description:'batterie beton, camero propre, 128go',prix:220000,categorie:'phone',badge:'TOP',image:"images/samsung-s.jpg"},{nom:'Google Pixel 6 Pro',description:'Camera au calme, slim, 128go',prix:145000,categorie:'phone',badge:null,image:'images/pixel6'},{nom:'Huawei P30 Pro',description:'Propre, batterie propre',prix:100000,categorie:'phone',badge:null,image:'images/honor.jpg'},{nom:'Flybox MTN 4G',description:'Prend toute les puces',prix:30000,categorie:'accessoires',badge:null,image:'images/homebox-mtn.jpg'},{nom:'PS4 Slim ',description:'1 manette, Jeux',prix:150000,categorie:'Gaming',badge:null,image:'images/hero-bg.jpg'}, {nom:'Redmi note 8',description:'RAM 8go, 128go',prix:55000,categorie:'phone',badge:null,image:'images/redmi.jpg'}]
+const PF=[{nom:'IPhone 13"',description:'Batterie 90%, 256GB SSD, ultra rapide',prix:185000,categorie:'Telephone',emoji:'',badge:'EN SOLDE',image:'images/iphone13.jpg'},{nom:'Google pixel 5a',description:'5G, 8GB RAM, 128GB"',prix:80000,categorie:'Telephone',badge:'PROMO',image:'images/pixel5.jpg'},{nom:'Google pixel 8',description:'6.2", 128GB, 5000mAh, caméra magnifique',prix:170000,categorie:'phone',badge:'PROMO',image:'images/pixel8.jpg'},{nom:'Dell latitude 5300',description:'Intel Core I3 8em Generation,RAM 8go DDR4, ROM 256go SSD, 13.5 pouces Full HD, Windows 11 installé',categorie:'PC portable',badge:null,image:'images/boutique.jpg'},{nom:'Samsung Galaxy S23',description:'batterie beton, camero propre, 128go',prix:220000,categorie:'phone',badge:'TOP',image:"images/samsung-s.jpg"},{nom:'Google Pixel 6 Pro',description:'Camera au calme, slim, 128go',prix:145000,categorie:'phone',badge:null,image:'images/pixel6.jpg'},{nom:'Huawei P30 Pro',description:'Propre, batterie propre',prix:100000,categorie:'phone',badge:null,image:'images/honor.jpg'},{nom:'Flybox MTN 4G',description:'Prend toute les puces',prix:30000,categorie:'accessoires',badge:null,image:'images/homebox-mtn.jpg'},{nom:'PS4 Slim ',description:'1 manette, Jeux',prix:150000,categorie:'Gaming',badge:null,image:'images/hero-bg.jpg'}, {nom:'Redmi note 8',description:'RAM 8go, 128go',prix:55000,categorie:'phone',badge:null,image:'images/redmi.jpg'}]
 let AP=[];
 async function loadProds(){try{const r=await fetch(`${API}/produits`);const j=await r.json();if(j.success&&j.data.length){AP=j.data;}else throw 0;}catch{AP=PF;}renderProds(AP);}
 function bc(b){if(!b)return'';const u=b.toUpperCase();return u==='NOUVEAU'?'bn':u==='PROMO'?'bp':'bt';}
