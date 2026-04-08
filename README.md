@@ -201,16 +201,16 @@ frontend/images/iphone14.jpg  ✅
 | | |
 |---|---|
 | 📍 Adresse | Avenue Kennedy, face ancien maison Orange, Mfoundi Mall Btq R53, Yaoundé |
-| 📞 Téléphone | +237 656 01 14 38 |
-| 💬 WhatsApp | +237 681 38 41 85 |
-| ✉️ Email | kamdememmanuel10@gmail.com |
+| 📞 Téléphone | +237 640 10 74 87 |
+| 💬 WhatsApp | +237 640 10 74 87 |
+| ✉️ Email | gracekamgne22@gmail.com |
 | 📘 Facebook | camernet work |
 
 ---
 
 ## 👨‍💻 Développeur
 
-Développé par **Emmanuel Kamdemx.** — Étudiant en Informatique, Yaoundé, Cameroun.
+Développé par **Emmanuel Kamdem Franck.** — Étudiant en Informatique, Yaoundé, Cameroun.
 
 ---
 
